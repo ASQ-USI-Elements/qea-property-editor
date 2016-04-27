@@ -1,0 +1,36 @@
+<html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="./qea-property-editor.html">
+
+<!--
+Element used to simplify the use of que-proprty-editor with a huge number of properties
+
+Example:
+  <qea-property-editor-repeater
+    property-Array=[[arrays]]
+    values={{result}}>
+  </qea-property-editor-repeater>
+
+
+@demo demo/index.html
+-->
+
+
+</head><body><dom-module id="qea-property-editor-repeater">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <template is="dom-repeat" items="[[propertyArray]]">
+      <qea-property-editor on-value-changed="_notifyChanges" name="[[item.name]]" label="[[item.label]]" type="[[item.type]]" widget-type="[[item.widgetType]]" description="[[item.description]]" default="[[item.default]]" value="{{item.value}}" is-advanced-property="[[item.isAdvancedProperty]]" is-advanced-user="[[eserLevel]]"></qea-property-editor>
+    </template>
+
+    gianni
+    {{selector.value}}
+    <array-selector id="selector" items="{{propertyArray}}" selected="{{selected}}" toggle=""></array-selector>
+
+
+  </template>
+  </dom-module>
+<script src="qea-property-editor-repeater.js"></script></body></html>

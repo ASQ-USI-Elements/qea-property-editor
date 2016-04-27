@@ -21,7 +21,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <p>An example of <code>&lt;qea-property-editor&gt;</code>:</p>
 
 
-    <qea-property-editor></qea-property-editor>
+    <qea-property-editor
+      name="disable"
+      label='disable the question'
+      type='boolean',
+      description='if enabled the user will not be able to edit this question'
+      default='false'
+    ></qea-property-editor>
 
     <script>
       var propertyEditor = document.querySelector('qea-property-editor');

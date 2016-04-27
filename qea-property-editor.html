@@ -1,5 +1,13 @@
 <html><head><link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../paper-input/paper-input.html">
+<link rel="import" href="../paper-slider/paper-slider.html">
+<link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../paper-item/paper-item.html">
+<link rel="import" href="../paper-listbox/paper-listbox.html">
+<link rel="import" href="../paper-toggle-button/paper-toggle-button.html">
+
+
+
 
 
 <!--
@@ -18,14 +26,12 @@ Example:
     ></qea-property-editor>
 
 @demo demo/index.html
-@hero hero.svg
 -->
 </head><body><dom-module id="qea-property-editor">
   <template>
     <style>
       :host {
         display: block;
-        width: 300px;
       }
       .propContainer{
         color: rgba(0, 0, 0, 0.7);
@@ -38,23 +44,67 @@ Example:
         padding-left: 15px;
         max-width: 70%;
       }
+      .infoIcon{
+        padding: 5px;
+        border-radius: 50%;
+        font-size: 1.5em;
+        cursor: pointer;
+      }
+      .infoIcon:hover{
+        /*color: red;*/
+        background: #eee;
+      }
     </style>
-
-    <template is="dom-if" if="[[_isAcceptableType(type)]]">
+    <template is="dom-if" if="[[_isAcceptableType(type, isAdvancedUser, isAdvancedProperty)]]">
       <div class="propContainer">
 
         <div class="label">
           <span>[[_nameToVisualize]]</span>
-          <paper-icon-button icon="info-outline" on-tap="_showInfo" hidden="{{_isPresent(propInfo.desc)}}"></paper-icon-button>
+          <span class="infoIcon" hidden$="{{!description}}" on-tap="_showInfo">ℹ</span>
         </div>
 
         <!-- string -->
-        <template is="dom-if" if="[[_checkType('string', type)]]">
+        <template is="dom-if" if="[[_showString(type)]]">
           <div class="setter">
-            <paper-input label="Input label" no-label-float="" data="[[propInfo.name]]" on-change="_updateStringProp"></paper-input>
+            <paper-input label="Input label" no-label-float="" value="{{value}}">
+            </paper-input>
           </div>
         </template>
 
+        <!-- number -->
+        <template is="dom-if" if="[[_showNumber(type, 'simple')]]">
+          <div class="setter">
+            <paper-input label="Input label" no-label-float="" type="number" value="{{value}}">
+            </paper-input>
+          </div>
+        </template>
+        <template is="dom-if" if="[[_showNumber(type, 'range')]]">
+          <div class="setter">
+            <paper-slider editable="" expand="" min="[[_slider.min]]" max="[[_slider.max]]" value="{{value}}">
+            </paper-slider>
+          </div>
+        </template>
+
+        <!-- enum -->
+        <template is="dom-if" if="[[_showEnum(type)]]">
+          <div class="setter">
+            <paper-dropdown-menu selected-item-label="{{value}}" toggles="">
+              <paper-listbox class="dropdown-content">
+                <template is="dom-repeat" items="[[_enum]]">
+                  <paper-item>[[item]]</paper-item>
+                </template>
+              </paper-listbox>
+            </paper-dropdown-menu>
+          </div>
+        </template>
+
+        <!-- boolean -->
+        <template is="dom-if" if="[[_showBoolean(type)]]">
+          <div class="setter">
+            <paper-toggle-button checked="{{value}}">
+            </paper-toggle-button>
+          </div>
+        </template>
 
     </div></template>
 

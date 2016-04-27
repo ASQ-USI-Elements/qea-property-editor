@@ -57,15 +57,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
           /**
           * OPTIONAL default property value,
-          * if type == enum will bean array of strings ex "['hello', 'world']".
+          * if type == enum will bea series of strings ex "dog, cat, elephant".
           * if type == number && widgetType == range use this notation "1-10"
           */
           default: {
-            notify: true
+            notify: true,
+            observer: '_setInitialValue'
           },
 
           value: {
-            notyfy: true
+            notify: true,
+            observer: '_applyProperty'
           },
 
           /**
@@ -74,7 +76,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           */
           isAdvancedProperty: {
             type: Boolean,
-            value: true
+            value: false
           },
 
           isAdvancedUser: {
@@ -85,18 +87,55 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           _nameToVisualize: {
             type: String,
             computed: '_nameChooser(name, label)'
+          },
+
+          _slider: {
+            type: Object,
+            value: function value() {
+              return { min: 0, max: 10 };
+            }
+          },
+
+          _enum: {
+            type: Array,
+            value: function value() {
+              return [];
+            }
           }
         };
       }
     }, {
       key: '_isAcceptableType',
-      value: function _isAcceptableType(type) {
-        return ['boolean', 'string', 'number', 'enum'].indexOf(type.toLowerCase()) > -1;
+      value: function _isAcceptableType(type, isAdvancedUser, isAdvancedProperty) {
+        var availableType = ['boolean', 'string', 'number', 'enum'].indexOf(type.toLowerCase()) > -1;
+        return availableType && isAdvancedUser === isAdvancedProperty || !isAdvancedProperty;
       }
     }, {
-      key: '_checkType',
-      value: function _checkType(type, propType) {
-        return type.toLowerCase() === propType.toLowerCase();
+      key: '_showNumber',
+      value: function _showNumber(type) {
+        var inputKind = arguments.length <= 1 || arguments[1] === undefined ? 'simple' : arguments[1];
+
+        if (type === 'number' && this.widgetType == inputKind) {
+          return true;
+        } else if (type === 'number' && !this.widgetType && inputKind == 'simple') {
+          return true;
+        }
+        return false;
+      }
+    }, {
+      key: '_showString',
+      value: function _showString(type) {
+        return type.toLowerCase() === 'string';
+      }
+    }, {
+      key: '_showEnum',
+      value: function _showEnum(type) {
+        return type.toLowerCase() === 'enum';
+      }
+    }, {
+      key: '_showBoolean',
+      value: function _showBoolean(type) {
+        return type.toLowerCase() === 'boolean';
       }
     }, {
       key: '_nameChooser',
@@ -104,6 +143,49 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         var label = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
 
         return label === '' ? name : label;
+      }
+    }, {
+      key: '_setInitialValue',
+      value: function _setInitialValue(defaultValue) {
+        // boolean | string | number | enum
+        // colour | richText  | range | code
+        switch (this.type.toLowerCase()) {
+          case 'boolean':
+            this.value = defaultValue == 'true';
+            break;
+          case 'string':
+            if (this.widgetType && ['colour', 'richText', 'code'].indexOf(this.widgetType.toLowerCase()) > -1) {
+              // set advance editor
+            } else {
+                this.value = defaultValue;
+              }
+            break;
+          case 'number':
+            if (this.widgetType && this.widgetType.toLowerCase() === 'range') {
+              var values = defaultValue.split('-');
+              this._slider = { min: Number(values[0]), max: Number(values[1]) };
+            } else {
+              this.value = defaultValue;
+            }
+            break;
+          case 'enum':
+            this._enum = defaultValue.split(',');
+            break;
+          default:
+
+        }
+      }
+    }, {
+      key: '_applyProperty',
+      value: function _applyProperty(value) {
+        if (this.referenceId && this.referenceId !== '') {
+          Polymer.dom(this.parentNode).querySelector('#' + this.referenceId)[this.name] = value;
+        }
+      }
+    }, {
+      key: '_showInfo',
+      value: function _showInfo() {
+        alert(this.description);
       }
     }, {
       key: 'behaviors',

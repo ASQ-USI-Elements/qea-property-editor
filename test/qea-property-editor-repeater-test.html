@@ -1,0 +1,80 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+
+    <!-- Step 1: import the element to test -->
+    <link rel="import" href="../qea-property-editor-repeater.html">
+  </head>
+  <body>
+
+    <!-- You can use the document as a place to set up your fixtures. -->
+    <test-fixture id="qea-property-editor-repeater-fixture">
+      <template>
+        <qea-property-editor-repeater ></qea-property-editor-repeater>
+      </template>
+    </test-fixture>
+
+    <script>
+      suite('<qea-property-editor-repeater>', function() {
+
+        var myEl;
+
+        setup(function() {
+          myEl = fixture('qea-property-editor-repeater-fixture');
+        });
+
+        test('correcly render empty array', function(done) {
+          myEl.propertyArray = []
+          flush(function() {
+            assert.equal(null, Polymer.dom(myEl.root).querySelector('qea-property-editor'));
+            done()
+          })
+        });
+
+        test('correcly render array of properties', function(done) {
+          myEl.propertyArray = [
+            {
+              name: 'check',
+              label: 'im a label',
+              type: 'boolean',
+              description: 'im a description',
+              default: 'true'
+            },
+            {
+              name: 'check 2',
+              label: 'im a label 2',
+              type: 'enum',
+              description: 'im a description 2',
+              default: 'dog, cat'
+            }
+          ]
+          flush(function() {
+            assert.equal(2, Polymer.dom(myEl.root).querySelectorAll('qea-property-editor').length);
+            assert.notEqual(null, Polymer.dom(myEl.root).querySelectorAll('paper-toggle-button'))
+            assert.notEqual(null, Polymer.dom(myEl.root).querySelectorAll('paper-dropdown-menu'))
+
+            done()
+          })
+        });
+
+
+
+      });
+    </script>
+
+  </body>
+</html>
