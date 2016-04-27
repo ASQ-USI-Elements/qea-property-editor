@@ -17,7 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script src="../webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../iron-component-page/iron-component-page.html">
-  <link rel="import" href="./test-el.html">
+  <link rel="import" href="./qea-advanced-text-editor.html">
 
 </head>
 <body unresolved>
@@ -26,7 +26,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        where &lt;main-component&gt;.html" is a file that imports all of the
        components you want documented. -->
   <!-- <iron-component-page src='my-files.html'></iron-component-page> -->
-  <test-el></test-el>
-
+  <qea-advanced-text-editor></qea-advanced-text-editor>
+  <button type="button" name="button" onclick="faicose()">open </button>
+  <script type="text/javascript">
+    function faicose() {
+      var a =document.querySelector('qea-advanced-text-editor');
+      a.openTextDialog("<h1>gatto panceri</h1>")
+      console.log(a);
+    }
+  </script>
 </body>
 </html>

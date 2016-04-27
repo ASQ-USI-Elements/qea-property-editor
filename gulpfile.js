@@ -56,7 +56,8 @@ gulp.task('linter', function () {
 		},
 		globals: {
 			'$':true,
-      'Polymer': true
+      'Polymer': true,
+      'Promise': true
 		},
 		envs: [
 			'browser'
