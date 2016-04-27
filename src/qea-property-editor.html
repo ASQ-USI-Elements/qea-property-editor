@@ -1,0 +1,166 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-input/paper-input.html">
+
+
+<!--
+Element used to set all the different types of tproperty of the asq-questions.
+Example:
+    <qea-property-editor
+      name='h1Color'
+      label='title color'
+      type='string',
+      widgetType='colour'
+      description='property use to set th ecolor of the title'
+      default='#eee'
+      value={{title.colour}}
+      isAdvancedProperty='false'
+      isAdvancedUser=[[user.level]]
+    ></qea-property-editor>
+
+@demo demo/index.html
+@hero hero.svg
+-->
+<dom-module id="qea-property-editor">
+  <template>
+    <style>
+      :host {
+        display: block;
+        width: 300px;
+      }
+      .propContainer{
+        color: rgba(0, 0, 0, 0.7);
+        margin: 3px 0;
+      }
+      .label{
+
+      }
+      .setter{
+        padding-left: 15px;
+        max-width: 70%;
+      }
+    </style>
+
+    <template is="dom-if" if="[[_isAcceptableType(type)]]">
+      <div class="propContainer">
+
+        <div class="label">
+          <span>[[_nameToVisualize]]</span>
+          <paper-icon-button icon="info-outline" on-tap='_showInfo' hidden="{{_isPresent(propInfo.desc)}}" ></paper-icon-button>
+        </div>
+
+        <!-- string -->
+        <template is="dom-if" if="[[_checkType('string', type)]]">
+          <div class="setter">
+            <paper-input label="Input label"
+              no-label-float
+              data=[[propInfo.name]]
+              on-change="_updateStringProp"></paper-input>
+          </div>
+        </template>
+
+
+    </template>
+
+  </template>
+  <script>
+  (function () {
+    'use strict'
+
+    class qeaPropertyEditor {
+
+      get behaviors() {
+        return [];
+      }
+
+      beforeRegister(){
+        this.is = 'qea-property-editor'
+        this.properties = {
+          /**
+          * Name of the property
+          */
+          name: String,
+
+          /**
+          * OPTIONAL. User friendly name of the property.
+          * if not specified will be used the 'name' property OPTIONAL
+          */
+          label: String,
+
+          /**
+          * Specify the type of the input to show to edit the property
+          * @value boolean | string | number | enum
+          */
+          type: {
+            type: String,
+            value: 'string'
+          },
+
+          /**
+          * OPTIONAL Specify the type of the advanced input to show
+          * to edit the property
+          * @value colour | richText  | range | code
+          */
+          widgetType: String,
+
+          /**
+          * OPTIONAL description of the property.
+          */
+          description: String,
+
+          /**
+          * OPTIONAL id of the item you want to apply this property.
+          * Use polymer data binding when possible.
+          */
+          referenceId: String,
+
+          /**
+          * OPTIONAL default property value,
+          * if type == enum will bean array of strings ex "['hello', 'world']".
+          * if type == number && widgetType == range use this notation "1-10"
+          */
+          default: {
+            notify: true
+          },
+
+          value: {
+            notyfy: true
+          },
+
+          /**
+          * OPTIONAL. if true this property will be visible only to advanced users
+          * @default true
+          */
+          isAdvancedProperty: {
+            type: Boolean,
+            value: true
+          },
+
+          isAdvancedUser: {
+            type: Boolean,
+            value: false
+          },
+
+          _nameToVisualize:{
+            type:String,
+            computed: '_nameChooser(name, label)'
+          }
+        }
+      }
+
+      _isAcceptableType(type){
+        return ['boolean','string','number','enum'].indexOf(type.toLowerCase()) > -1;
+      }
+
+      _checkType(type, propType){
+        return type.toLowerCase() === propType.toLowerCase();
+      }
+
+      _nameChooser(name, label=''){
+        return label === '' ? name : label;
+      }
+    }
+
+    Polymer(qeaPropertyEditor);
+  })()
+  </script>
+</dom-module>
