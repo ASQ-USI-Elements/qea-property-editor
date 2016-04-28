@@ -44,7 +44,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           * @default false
           */
           isAdvancedUser: {
-            type: Boolean
+            type: String
           }
         };
       }
@@ -86,9 +86,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       key: '_notifyChanges',
       value: function _notifyChanges(e) {
         var propName = e.target.name;
+
         var value = e.detail.value;
         var currentValues = this.values;
-        if (value != undefined) {
+        if (value != undefined && propName != undefined) {
           currentValues[propName] = value;
           this.set('values', Object.assign({}, currentValues));
         }

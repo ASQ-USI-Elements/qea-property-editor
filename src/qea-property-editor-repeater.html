@@ -32,13 +32,9 @@ Example:
         default=[[item.default]]
         value={{item.value}}
         is-Advanced-Property=[[item.isAdvancedProperty]]
-        is-Advanced-User=[[eserLevel]]
+        is-Advanced-User=[[isAdvancedUser]]
       ></qea-property-editor>
     </template>
-
-    gianni
-    {{selector.value}}
-    <array-selector id="selector" items="{{propertyArray}}" selected="{{selected}}" toggle></array-selector>
 
 
   </template>
@@ -80,7 +76,7 @@ Example:
           * @default false
           */
           isAdvancedUser:{
-            type: Boolean
+            type: String
           }
         }
       }
@@ -96,9 +92,10 @@ Example:
 
       _notifyChanges(e){
         let propName = e.target.name;
+
         let value = e.detail.value;
         let currentValues = this.values;
-        if (value != undefined) {
+        if (value != undefined && propName != undefined) {
           currentValues[propName] = value
           this.set('values', Object.assign({}, currentValues));
         }

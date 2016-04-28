@@ -26,7 +26,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           * OPTIONAL. User friendly name of the property.
           * if not specified will be used the 'name' property OPTIONAL
           */
-          label: String,
+          label: {
+            type: String,
+            value: ''
+          },
 
           /**
           * Specify the type of the input to show to edit the property
@@ -75,18 +78,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           * @default true
           */
           isAdvancedProperty: {
-            type: Boolean,
-            value: false
+            type: String,
+            value: 'false'
           },
 
+          /**
+          * OPTIONAL. if true all properties will be visible
+          * @default true
+          */
           isAdvancedUser: {
-            type: Boolean,
-            value: false
+            type: String,
+            value: 'false'
           },
 
           _nameToVisualize: {
             type: String,
-            computed: '_nameChooser(name, label)'
+            computed: '_nameChooser(name)'
           },
 
           _slider: {
@@ -101,14 +108,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function value() {
               return [];
             }
+          },
+
+          _isPropertyVisible: {
+            type: Boolean,
+            computed: '_isAcceptableType(type, isAdvancedUser)'
           }
         };
       }
     }, {
       key: '_isAcceptableType',
-      value: function _isAcceptableType(type, isAdvancedUser, isAdvancedProperty) {
+      value: function _isAcceptableType(type, isAdvancedUser) {
         var availableType = ['boolean', 'string', 'number', 'enum'].indexOf(type.toLowerCase()) > -1;
-        return availableType && isAdvancedUser === isAdvancedProperty || !isAdvancedProperty;
+        var isAdvUs = isAdvancedUser.toLowerCase() == 'true';
+        var isAdvPr = this.isAdvancedProperty && this.isAdvancedProperty.toLowerCase() == 'true';
+
+        return availableType && (isAdvUs === isAdvPr || !isAdvPr);
       }
     }, {
       key: '_showNumber',
@@ -140,8 +155,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }, {
       key: '_nameChooser',
       value: function _nameChooser(name) {
-        var label = arguments.length <= 1 || arguments[1] === undefined ? '' : arguments[1];
-
+        var label = this.label || '';
         return label === '' ? name : label;
       }
     }, {
