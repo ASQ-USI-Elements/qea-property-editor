@@ -17,7 +17,6 @@ Example:
       name='h1Color'
       label='title color'
       type='string',
-      widgetType='colour'
       description='property use to set th ecolor of the title'
       default='#eee'
       value={{title.colour}}
@@ -25,6 +24,18 @@ Example:
       isAdvancedUser=[[user.level]]
     ></qea-property-editor>
 
+If you want to use the code or rich text widgetType, remember to include the qea-advanced-editors
+in parent component of the qea-property-editor
+Example:
+    <my-component>
+      <qea-advanced-editors></qea-advanced-editors>
+      <qea-property-editor
+        name="codeSample"
+        type="string"
+        widgetType="code"
+        default="let everything = 42;"
+      </qea-property-editor
+    <my-component>
 @demo demo/index.html
 -->
 <dom-module id="qea-property-editor">
@@ -35,24 +46,23 @@ Example:
       }
       .propContainer{
         color: rgba(0, 0, 0, 0.7);
-        margin: 3px 0;
+        margin: 10px 0;
       }
       .label{
 
       }
       .setter{
+        padding-top: 5px;
         padding-left: 15px;
         max-width: 70%;
       }
       .infoIcon{
         padding: 5px;
-        border-radius: 50%;
         font-size: 1.5em;
         cursor: pointer;
       }
       .infoIcon:hover{
-        /*color: red;*/
-        background: #eee;
+        color: grey;
       }
     </style>
     <template is="dom-if" if="[[_isPropertyVisible]]">
@@ -60,16 +70,21 @@ Example:
 
         <div class="label">
           <span>[[_nameToVisualize]]</span>
-          <span class="infoIcon" hidden$="{{!description}}" on-tap='_showInfo'>&#8505</span>
+          <span class="infoIcon" hidden$="{{_showDescription}}" on-tap='_showInfo'>&#8505</span>
         </div>
 
         <!-- string -->
-        <template is="dom-if" if="[[_showString(type)]]">
+        <template is="dom-if" if="[[_showString(type, 'simple')]]">
           <div class="setter">
             <paper-input label="Input label"
               no-label-float
               value={{value}}>
             </paper-input>
+          </div>
+        </template>
+        <template is="dom-if" if="[[_showString(type, 'advanced')]]">
+          <div class="setter">
+            <paper-button raised on-tap='_openAdvancedEdit'>open editor</paper-button>
           </div>
         </template>
 
@@ -95,7 +110,7 @@ Example:
 
         <!-- enum -->
         <template is="dom-if" if="[[_showEnum(type)]]">
-          <div class="setter">
+          <div class="setter" style="margin-top: -14px; padding-top: 0;">
             <paper-dropdown-menu  selected-Item-Label={{value}} toggles>
               <paper-listbox class="dropdown-content">
                 <template is="dom-repeat" items="[[_enum]]">
@@ -223,8 +238,18 @@ Example:
           _isPropertyVisible:{
             type: Boolean,
             computed: '_isAcceptableType(type, isAdvancedUser)'
+          },
+
+          _showDescription:{
+            type: Boolean,
+            value: true,
+            computed: '_showDesc(description)'
           }
         }
+      }
+
+      _showDesc(desc){
+        return desc ? false: true;
       }
 
       _isAcceptableType(type, isAdvancedUser){
@@ -236,16 +261,25 @@ Example:
       }
 
       _showNumber(type, inputKind='simple'){
-        if (type === 'number' && this.widgetType == inputKind) {
+        if (type.toLowerCase() === 'number' && this.widgetType == inputKind) {
           return true;
-        }else if (type === 'number' && !this.widgetType && inputKind == 'simple') {
+        }else if (type.toLowerCase() === 'number' && !this.widgetType && inputKind == 'simple') {
           return true;
         }
         return false;
       }
 
-      _showString(type){
-        return type.toLowerCase() === 'string';
+      _showString(type, templateType){
+        let general = type.toLowerCase() === 'string';
+        if (!general) {return false;}
+        let withWidget = (this.widgetType && ['code','richtext','text-code'].indexOf(this.widgetType.toLowerCase())>-1);
+        if (withWidget && templateType == 'advanced') {
+          return true;
+        }
+        if (!withWidget && templateType == 'simple') {
+          return true;
+        }
+
       }
 
       _showEnum(type){
@@ -300,6 +334,22 @@ Example:
 
       _showInfo() {
        alert(this.description)
+     }
+
+     _openAdvancedEdit(){
+       let advancedEditors = Polymer.dom(this.parentNode).querySelector('qea-advanced-editors')
+       if (advancedEditors) {
+         let c = this.default || '';
+         advancedEditors.openDialog(c, this.widgetType).then(
+           (result)=>{
+             if (result) {
+               this.value = result;
+             }
+           }
+         )
+       }else {
+         console.error("no editor founded. remember to include the qea-advanced-editors file");
+       }
      }
 
     }

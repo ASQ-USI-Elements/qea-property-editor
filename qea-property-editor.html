@@ -17,7 +17,6 @@ Example:
       name='h1Color'
       label='title color'
       type='string',
-      widgetType='colour'
       description='property use to set th ecolor of the title'
       default='#eee'
       value={{title.colour}}
@@ -25,6 +24,18 @@ Example:
       isAdvancedUser=[[user.level]]
     ></qea-property-editor>
 
+If you want to use the code or rich text widgetType, remember to include the qea-advanced-editors
+in parent component of the qea-property-editor
+Example:
+    <my-component>
+      <qea-advanced-editors></qea-advanced-editors>
+      <qea-property-editor
+        name="codeSample"
+        type="string"
+        widgetType="code"
+        default="let everything = 42;"
+      </qea-property-editor
+    <my-component>
 @demo demo/index.html
 -->
 </head><body><dom-module id="qea-property-editor">
@@ -35,24 +46,23 @@ Example:
       }
       .propContainer{
         color: rgba(0, 0, 0, 0.7);
-        margin: 3px 0;
+        margin: 10px 0;
       }
       .label{
 
       }
       .setter{
+        padding-top: 5px;
         padding-left: 15px;
         max-width: 70%;
       }
       .infoIcon{
         padding: 5px;
-        border-radius: 50%;
         font-size: 1.5em;
         cursor: pointer;
       }
       .infoIcon:hover{
-        /*color: red;*/
-        background: #eee;
+        color: grey;
       }
     </style>
     <template is="dom-if" if="[[_isPropertyVisible]]">
@@ -60,14 +70,19 @@ Example:
 
         <div class="label">
           <span>[[_nameToVisualize]]</span>
-          <span class="infoIcon" hidden$="{{!description}}" on-tap="_showInfo">ℹ</span>
+          <span class="infoIcon" hidden$="{{_showDescription}}" on-tap="_showInfo">ℹ</span>
         </div>
 
         <!-- string -->
-        <template is="dom-if" if="[[_showString(type)]]">
+        <template is="dom-if" if="[[_showString(type, 'simple')]]">
           <div class="setter">
             <paper-input label="Input label" no-label-float="" value="{{value}}">
             </paper-input>
+          </div>
+        </template>
+        <template is="dom-if" if="[[_showString(type, 'advanced')]]">
+          <div class="setter">
+            <paper-button raised="" on-tap="_openAdvancedEdit">open editor</paper-button>
           </div>
         </template>
 
@@ -87,7 +102,7 @@ Example:
 
         <!-- enum -->
         <template is="dom-if" if="[[_showEnum(type)]]">
-          <div class="setter">
+          <div class="setter" style="margin-top: -14px; padding-top: 0;">
             <paper-dropdown-menu selected-item-label="{{value}}" toggles="">
               <paper-listbox class="dropdown-content">
                 <template is="dom-repeat" items="[[_enum]]">

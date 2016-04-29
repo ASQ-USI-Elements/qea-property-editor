@@ -52,6 +52,7 @@ gulp.task('linter', function () {
 		    'modules': true
 		},
 		rules: {
+      'no-console': ["error", { allow: ["warn", "error"] }],
 			'strict': 2
 		},
 		globals: {

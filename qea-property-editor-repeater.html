@@ -10,6 +10,13 @@ Example:
     values={{result}}>
   </qea-property-editor-repeater>
 
+If you want to use the code or rich text widgetType, remember to include the qea-advanced-editors
+inside this component
+
+Example:
+    <qea-property-editor-repeater property-Array=[[arrays]] values={{result}}>
+      <qea-advanced-editors></qea-advanced-editors>
+    </qea-property-editor-repeater>
 
 @demo demo/index.html
 -->
@@ -22,6 +29,7 @@ Example:
         display: block;
       }
     </style>
+    <content></content>
     <template is="dom-repeat" items="[[propertyArray]]">
       <qea-property-editor on-value-changed="_notifyChanges" name="[[item.name]]" label="[[item.label]]" type="[[item.type]]" widget-type="[[item.widgetType]]" description="[[item.description]]" default="[[item.default]]" value="{{item.value}}" is-advanced-property="[[item.isAdvancedProperty]]" is-advanced-user="[[isAdvancedUser]]"></qea-property-editor>
     </template>

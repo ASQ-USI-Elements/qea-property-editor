@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../web-component-tester/browser.js"></script>
+    <!-- import the element to test -->
+    <link rel="import" href="../qea-advanced-editors.html">
+  </head>
+  <body>
+    <!-- use the document as a place to set up your fixtures -->
+    <test-fixture id="qea-advanced-editors-fixture">
+      <template>
+        <qea-advanced-editors ></qea-advanced-editors>
+      </template>
+    </test-fixture>
+    <script>
+      suite('<qea-advanced-editors>', function() {
+        var myEl;
+
+        setup(function() {
+          myEl = fixture('qea-advanced-editors-fixture');
+          stub('qea-advanced-editors', {
+            _getContent: function() {
+              return 'hello world'
+            }
+          });
+        });
+
+        test('open dialog', function () {
+          assert.equal(false, myEl._isOpen)
+          myEl.openDialog();
+          assert.equal(true, myEl._isOpen)
+        })
+
+
+
+        test('receive content on dialog close', function(done) {
+          flush(function () {
+            myEl.openDialog().then(
+              function(a){
+                assert.equal('hello world', a)
+                done()
+              }
+            )
+          })
+
+          myEl.async(function functionName() {
+            myEl.$.myDialog.fire('iron-overlay-closed',{confirmed: true})
+          }, 500)
+
+        })
+
+        test('open the only code editor', function(done) {
+          flush(function () {
+            myEl.openDialog('', 'code').then(
+              function(a){
+                assert.equal(true, Polymer.dom(myEl.root).querySelectorAll('paper-tab')[0].hidden);
+                assert.equal(false, Polymer.dom(myEl.root).querySelectorAll('paper-tab')[1].hidden);
+                done()
+              }
+            )
+            assert.equal(1, myEl._selected);
+          })
+
+          myEl.async(function functionName() {
+            myEl.$.myDialog.fire('iron-overlay-closed',{confirmed: true})
+          }, 500)
+
+        })
+
+        test('open the only text editor', function(done) {
+          flush(function () {
+            myEl.openDialog('', 'richtext').then(
+              function(a){
+                assert.equal(false, Polymer.dom(myEl.root).querySelectorAll('paper-tab')[0].hidden);
+                assert.equal(true, Polymer.dom(myEl.root).querySelectorAll('paper-tab')[1].hidden);
+                done()
+              }
+            )
+            assert.equal(0, myEl._selected);
+          })
+
+          myEl.async(function functionName() {
+            myEl.$.myDialog.fire('iron-overlay-closed',{confirmed: true})
+          }, 500)
+
+        })
+
+        test('open both editors', function(done) {
+          flush(function () {
+            myEl.openDialog('', 'text-code').then(
+              function(a){
+                assert.equal(false, Polymer.dom(myEl.root).querySelectorAll('paper-tab')[0].disabled);
+                assert.equal(false, Polymer.dom(myEl.root).querySelectorAll('paper-tab')[1].disabled);
+                done()
+              }
+            )
+          })
+
+          myEl.async(function functionName() {
+            myEl.$.myDialog.fire('iron-overlay-closed',{confirmed: true})
+          }, 500)
+
+        })
+
+      });
+    </script>
+  </body>
+</html>

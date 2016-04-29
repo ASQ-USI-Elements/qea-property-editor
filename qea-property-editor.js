@@ -113,8 +113,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           _isPropertyVisible: {
             type: Boolean,
             computed: '_isAcceptableType(type, isAdvancedUser)'
+          },
+
+          _showDescription: {
+            type: Boolean,
+            value: true,
+            computed: '_showDesc(description)'
           }
         };
+      }
+    }, {
+      key: '_showDesc',
+      value: function _showDesc(desc) {
+        return desc ? false : true;
       }
     }, {
       key: '_isAcceptableType',
@@ -130,17 +141,27 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       value: function _showNumber(type) {
         var inputKind = arguments.length <= 1 || arguments[1] === undefined ? 'simple' : arguments[1];
 
-        if (type === 'number' && this.widgetType == inputKind) {
+        if (type.toLowerCase() === 'number' && this.widgetType == inputKind) {
           return true;
-        } else if (type === 'number' && !this.widgetType && inputKind == 'simple') {
+        } else if (type.toLowerCase() === 'number' && !this.widgetType && inputKind == 'simple') {
           return true;
         }
         return false;
       }
     }, {
       key: '_showString',
-      value: function _showString(type) {
-        return type.toLowerCase() === 'string';
+      value: function _showString(type, templateType) {
+        var general = type.toLowerCase() === 'string';
+        if (!general) {
+          return false;
+        }
+        var withWidget = this.widgetType && ['code', 'richtext', 'text-code'].indexOf(this.widgetType.toLowerCase()) > -1;
+        if (withWidget && templateType == 'advanced') {
+          return true;
+        }
+        if (!withWidget && templateType == 'simple') {
+          return true;
+        }
       }
     }, {
       key: '_showEnum',
@@ -200,6 +221,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       key: '_showInfo',
       value: function _showInfo() {
         alert(this.description);
+      }
+    }, {
+      key: '_openAdvancedEdit',
+      value: function _openAdvancedEdit() {
+        var _this = this;
+
+        var advancedEditors = Polymer.dom(this.parentNode).querySelector('qea-advanced-editors');
+        if (advancedEditors) {
+          var c = this.default || '';
+          advancedEditors.openDialog(c, this.widgetType).then(function (result) {
+            if (result) {
+              _this.value = result;
+            }
+          });
+        } else {
+          console.error("no editor founded. remember to include the qea-advanced-editors file");
+        }
       }
     }, {
       key: 'behaviors',
