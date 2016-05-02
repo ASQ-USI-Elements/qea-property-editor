@@ -69,7 +69,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         if (this._selected == 0) {
           content = this.$.textEditor.getContent();
         } else {
-          content = this.$.aceEditor.editorValue;
+          content = '<pre><code>' + this.$.aceEditor.editorValue + '</code></pre>';
         }
         return content;
       }
