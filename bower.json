@@ -19,7 +19,9 @@
     "paper-elements": "PolymerElements/paper-elements#^1.0.7",
     "polymer-tinymce": "*",
     "iron-pages": "PolymerElements/iron-pages#^1.0.0",
-    "ace-element": "triglian/ace-element#master"
+    "ace-element": "triglian/ace-element#master",
+    "paper-tooltip": "PolymerElements/paper-tooltip#^1.1.2",
+    "iron-icons": "PolymerElements/iron-icons#^1.1.3"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
