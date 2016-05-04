@@ -1,12 +1,13 @@
 <html><head><link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../paper-input/paper-input.html">
-<link rel="import" href="../paper-slider/paper-slider.html">
+
+<link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../paper-input/paper-input.html">
 <link rel="import" href="../paper-item/paper-item.html">
 <link rel="import" href="../paper-listbox/paper-listbox.html">
+<link rel="import" href="../paper-slider/paper-slider.html">
 <link rel="import" href="../paper-toggle-button/paper-toggle-button.html">
-
-
+<link rel="import" href="../paper-tooltip/paper-tooltip.html">
 
 
 
@@ -56,13 +57,14 @@ Example:
         padding-left: 15px;
         max-width: 70%;
       }
-      .infoIcon{
-        padding: 5px;
-        font-size: 1.5em;
+      #infoIcon{
+        width:20px;
+        color:#BDBDBD;
         cursor: pointer;
+        background: transparent;
       }
-      .infoIcon:hover{
-        color: grey;
+      #infoIcon:hover{
+        color: #424242;
       }
     </style>
     <template is="dom-if" if="[[_isPropertyVisible]]">
@@ -70,7 +72,8 @@ Example:
 
         <div class="label">
           <span>[[_nameToVisualize]]</span>
-          <span class="infoIcon" hidden$="{{_showDescription}}" on-tap="_showInfo">ℹ</span>
+          <paper-tooltip for="infoIcon">[[description]]</paper-tooltip>
+          <iron-icon id="infoIcon" icon="icons:info-outline" hidden$="{{_showDescription}}"></iron-icon>
         </div>
 
         <!-- string -->

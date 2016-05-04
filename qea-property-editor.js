@@ -218,11 +218,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }
       }
     }, {
-      key: '_showInfo',
-      value: function _showInfo() {
-        alert(this.description);
-      }
-    }, {
       key: '_openAdvancedEdit',
       value: function _openAdvancedEdit() {
         var _this = this;
