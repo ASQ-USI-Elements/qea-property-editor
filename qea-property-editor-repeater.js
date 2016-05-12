@@ -63,7 +63,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           for (var _iterator = propertyArray[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
             var prop = _step.value;
 
-            values[prop.name] = undefined;
+            values[prop.name] = null;
           }
         } catch (err) {
           _didIteratorError = true;

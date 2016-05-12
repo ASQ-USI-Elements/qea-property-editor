@@ -212,7 +212,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }
     }, {
       key: '_applyProperty',
-      value: function _applyProperty(value) {
+      value: function _applyProperty(value, old) {
+        if (value === undefined && old !== undefined) {
+          this.value = old;
+        }
         if (this.referenceId && this.referenceId !== '') {
           Polymer.dom(this.parentNode).querySelector('#' + this.referenceId)[this.name] = value;
         }
