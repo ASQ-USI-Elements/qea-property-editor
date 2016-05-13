@@ -1,0 +1,35 @@
+<html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+<link rel="import" href="../ace-element/ace-element.html">
+
+</head><body><dom-module id="qea-advanced-code-editor">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      .editor{
+        position: relative;
+        width: 600px;
+        height: 500px;
+      }
+      #myDialog{
+        padding-top: 0;
+      }
+    </style>
+
+    <paper-dialog opened="{{isDialogOpen}}" on-iron-overlay-canceled="_preventCancellation" id="myDialog">
+      <h2>[[label]]</h2>
+
+      <div class="editor">
+        <ace-element id="aceEditor" font-size="{{fontSize}}" mode="{{mode}}" tabsize="{{tabSize}}" readonly="{{readonly}}" theme="{{theme}}"></ace-element>
+      </div>
+
+      <div class="buttons">
+        <paper-button dialog-dismiss="" id="cancell">Cancel</paper-button>
+        <paper-button dialog-confirm="" id="accept">Accept</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
+  </dom-module>
+<script src="qea-advanced-code-editor.js"></script></body></html>

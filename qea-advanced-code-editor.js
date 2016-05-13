@@ -7,24 +7,49 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 (function () {
   'use strict';
 
-  var qeaAdvancedTextEditor = function () {
-    function qeaAdvancedTextEditor() {
-      _classCallCheck(this, qeaAdvancedTextEditor);
+  var qeaAdvancedCodeEditor = function () {
+    function qeaAdvancedCodeEditor() {
+      _classCallCheck(this, qeaAdvancedCodeEditor);
     }
 
-    _createClass(qeaAdvancedTextEditor, [{
+    _createClass(qeaAdvancedCodeEditor, [{
       key: 'beforeRegister',
       value: function beforeRegister() {
-        this.is = 'qea-advanced-text-editor';
+        this.is = 'qea-advanced-code-editor';
         this.properties = {
-          /**
-          * notify the state of the dialog. true means open
-          * readOnly
-          */
+          label: {
+            type: String,
+            value: 'Create or modify code'
+          },
           isDialogOpen: {
+            notify: true,
             type: Boolean,
-            value: false,
-            notify: true
+            value: false
+          },
+          theme: {
+            notify: true,
+            type: String,
+            value: 'chrome'
+          },
+          fontSize: {
+            notify: true,
+            type: Number,
+            value: 12
+          },
+          mode: {
+            notify: true,
+            type: String,
+            value: 'html'
+          },
+          readonly: {
+            notify: true,
+            type: Boolean,
+            value: false
+          },
+          tabSize: {
+            notify: true,
+            value: 4,
+            type: Number
           }
         };
       }
@@ -41,43 +66,28 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }
 
       /**
-      * @return content (innerHtml) of text editor
-      */
-
-    }, {
-      key: 'getContent',
-      value: function getContent() {
-        return this.$.editor.getContent();
-      }
-    }, {
-      key: '_setContent',
-      value: function _setContent(content) {
-        this.$.editor.setContent(content);
-      }
-
-      /**
-      * Promise use to open the advanced text dialog
-      * @param content : if you whant to modify text pass it as string
+      * Promise use to open the advanced code dialog
+      * @param content : if you whant to modify code
       * @return the text created or modified or null if user close the dialog
       */
 
     }, {
-      key: 'openTextDialog',
-      value: function openTextDialog(content) {
+      key: 'openCodeDialog',
+      value: function openCodeDialog(content) {
         var _this = this;
 
         this.isDialogOpen = true;
         if (content) {
-          this._setContent(content);
+          this.$.aceEditor.editorValue = content;
         }
         return new Promise(function (resolve) {
           var self = _this;
           function onIronOverlayClosed(e) {
             var result = null;
             if (e.detail.confirmed) {
-              result = self.getContent();
+              result = self.$.aceEditor.editorValue;
             }
-            self._setContent('');
+            self.$.aceEditor.editorValue = '';
             e.target.removeEventListener('iron-overlay-closed', onIronOverlayClosed);
             resolve(result);
           }
@@ -91,8 +101,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }
     }]);
 
-    return qeaAdvancedTextEditor;
+    return qeaAdvancedCodeEditor;
   }();
 
-  Polymer(qeaAdvancedTextEditor);
+  Polymer(qeaAdvancedCodeEditor);
 })();
