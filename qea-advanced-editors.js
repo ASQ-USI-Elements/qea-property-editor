@@ -30,6 +30,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           _selected: {
             type: Number,
             value: 0
+          },
+          /**
+          * if true the return value will not be wrapped inside 
+          * <pre><code>...</code></pre>
+          */
+          noWrap: {
+            type: Boolean,
+            value: false
           }
         };
       }
@@ -69,7 +77,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         if (this._selected == 0) {
           content = this.$.textEditor.getContent();
         } else {
-          content = '<pre><code>' + this.$.aceEditor.editorValue + '</code></pre>';
+          if (this.noWrap) {
+            content = this.$.aceEditor.editorValue;
+          } else {
+            content = '<pre><code>' + this.$.aceEditor.editorValue + '</code></pre>';
+          }
         }
         return content;
       }
