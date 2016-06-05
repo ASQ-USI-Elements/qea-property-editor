@@ -82,6 +82,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: 'false'
           },
 
+          noWrap: {
+            type: Boolean,
+            value: false
+          },
+
           /**
           * OPTIONAL. if true all properties will be visible
           * @default true
@@ -228,7 +233,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         var advancedEditors = Polymer.dom(this.parentNode).querySelector('qea-advanced-editors');
         if (advancedEditors) {
           var c = this.default || '';
-          advancedEditors.openDialog(c, this.widgetType).then(function (result) {
+          advancedEditors.openDialog(c, this.widgetType, this.noWrap).then(function (result) {
             if (result) {
               _this.value = result;
             }

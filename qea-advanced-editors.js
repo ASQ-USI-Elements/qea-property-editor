@@ -90,6 +90,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       value: function openDialog(content, type) {
         var _this = this;
 
+        var noWrap = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+
+        this.noWrap = noWrap;
         this._isOpen = true;
         this._selectPage(type, content);
         return new Promise(function (resolve) {
