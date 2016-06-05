@@ -214,6 +214,11 @@ Example:
             value: 'false'
           },
 
+          noWrap: {
+            type: Boolean,
+            value: false
+          },
+
           /**
           * OPTIONAL. if true all properties will be visible
           * @default true
@@ -342,7 +347,7 @@ Example:
        let advancedEditors = Polymer.dom(this.parentNode).querySelector('qea-advanced-editors')
        if (advancedEditors) {
          let c = this.default || '';
-         advancedEditors.openDialog(c, this.widgetType).then(
+         advancedEditors.openDialog(c, this.widgetType, this.noWrap).then(
            (result)=>{
              if (result) {
                this.value = result;
