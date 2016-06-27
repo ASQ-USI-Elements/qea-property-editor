@@ -15,24 +15,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <title>qea-property-editor demo</title>
     <script src="../../webcomponentsjs/webcomponents-lite.min.js"></script>
     <link rel="import" href="../qea-property-editor.html">
+    <link rel="import" href="../qea-advanced-editors.html">
   </head>
   <body unresolved>
 
     <p>An example of <code>&lt;qea-property-editor&gt;</code>:</p>
+    <qea-advanced-editors></qea-advanced-editors>
 
+    <paper-input label="Input label" value="{{valued}}"></paper-input>
 
     <qea-property-editor
-      name="disable"
-      label='disable the question'
-      type='boolean',
-      description='if enabled the user will not be able to edit this question'
-      default='false'
+      name="advanced text"
+      label="edit the stuff"
+      type="string"
+      widget-type="code"
+      description="ciccia"
+      value="{{valued}}"
+      default="gatats"
     ></qea-property-editor>
+
+    <div inner-h-t-m-l="[[valued]]">
+      kmsd
+    </div>
 
     <script>
       var propertyEditor = document.querySelector('qea-property-editor');
-
-
 
     </script>
 

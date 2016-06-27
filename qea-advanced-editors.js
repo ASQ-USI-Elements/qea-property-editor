@@ -32,12 +32,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: 0
           },
           /**
-          * if true the return value will not be wrapped inside 
+          * if true the return value will not be wrapped inside
           * <pre><code>...</code></pre>
           */
           noWrap: {
             type: Boolean,
             value: false
+          },
+          textId: {
+            type: String,
+            value: this._idGenerator()
           }
         };
       }
@@ -107,6 +111,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           }
           _this.$.myDialog.addEventListener('iron-overlay-closed', onIronOverlayClosed);
         });
+      }
+    }, {
+      key: '_idGenerator',
+      value: function _idGenerator() {
+        var s4 = function s4() {
+          return ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
+        };
+        return 'textId' + (s4() + s4()) + '-' + s4() + '-' + s4() + '-' + s4() + '-' + (s4() + s4() + s4());
       }
     }, {
       key: 'behaviors',

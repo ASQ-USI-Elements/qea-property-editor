@@ -25,6 +25,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             type: Boolean,
             value: false,
             notify: true
+          },
+          textId: {
+            type: String,
+            value: this._idGenerator()
           }
         };
       }
@@ -83,6 +87,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           }
           _this.$.myDialog.addEventListener('iron-overlay-closed', onIronOverlayClosed);
         });
+      }
+    }, {
+      key: '_idGenerator',
+      value: function _idGenerator() {
+        var s4 = function s4() {
+          return ((1 + Math.random()) * 0x10000 | 0).toString(16).substring(1);
+        };
+        return 'textId' + (s4() + s4()) + '-' + s4() + '-' + s4() + '-' + s4() + '-' + (s4() + s4() + s4());
       }
     }, {
       key: 'behaviors',

@@ -41,6 +41,7 @@
         <!-- text editor -->
         <section id="textSection">
           <polymer-tinymce id="textEditor"
+            textarea-id="[[textId]]"
             tinytoolbar="insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent| fontsizeselect | link image | forecolor backcolor"
             tinyplugins='["advlist autolink lists link image charmap print preview anchor","searchreplace visualblocks code fullscreen","insertdatetime media table contextmenu paste","textcolor" ]'
           ></polymer-tinymce>
@@ -88,12 +89,16 @@
             value:0
           },
           /**
-          * if true the return value will not be wrapped inside 
+          * if true the return value will not be wrapped inside
           * <pre><code>...</code></pre>
           */
           noWrap :{
             type: Boolean,
             value: false
+          },
+          textId: {
+            type: String,
+            value: this._idGenerator()
           }
         }
       }
@@ -155,6 +160,13 @@
            this.$.myDialog.addEventListener('iron-overlay-closed', onIronOverlayClosed);
          }
         )
+     }
+
+     _idGenerator() {
+       const s4 = () => {
+         return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+       };
+       return `textId${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4() + s4() + s4()}`;
      }
 
 

@@ -23,6 +23,7 @@ Example:
     <paper-dialog opened={{isDialogOpen}} on-iron-overlay-canceled='_preventCancellation'  id='myDialog' >
       <h2>Create or modify text</h2>
       <polymer-tinymce id="editor"
+        textarea-id="[[textId]]"
         tinytoolbar="insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent| fontsizeselect | link image | forecolor backcolor"
         tinyplugins='["advlist autolink lists link image charmap print preview anchor","searchreplace visualblocks code fullscreen","insertdatetime media table contextmenu paste","textcolor" ]'
       ></polymer-tinymce>
@@ -54,6 +55,10 @@ Example:
             type: Boolean,
             value: false,
             notify: true
+          },
+          textId: {
+            type: String,
+            value: this._idGenerator()
           }
         }
       }
@@ -102,6 +107,13 @@ Example:
            this.$.myDialog.addEventListener('iron-overlay-closed', onIronOverlayClosed);
          }
         )
+     }
+
+     _idGenerator() {
+       const s4 = () => {
+         return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+       };
+       return `textId${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4() + s4() + s4()}`;
      }
 
 
