@@ -31,7 +31,7 @@ Example:
     </style>
     <content></content>
     <template is="dom-repeat" items="[[propertyArray]]">
-      <qea-property-editor on-value-changed="_notifyChanges" name="[[item.name]]" label="[[item.label]]" type="[[item.type]]" widget-type="[[item.widgetType]]" description="[[item.description]]" default="[[item.default]]" value="{{item.value}}" is-advanced-property="[[item.isAdvancedProperty]]" is-advanced-user="[[isAdvancedUser]]"></qea-property-editor>
+      <qea-property-editor on-value-changed="_notifyChanges" name="[[item.name]]" label="[[item.label]]" type="[[item.type]]" widget-type="[[item.widgetType]]" options="[[item.otions]]" description="[[item.description]]" default="[[item.default]]" value="{{item.value}}" is-advanced-property="[[item.isAdvancedProperty]]" is-advanced-user="[[isAdvancedUser]]"></qea-property-editor>
     </template>
 
 
