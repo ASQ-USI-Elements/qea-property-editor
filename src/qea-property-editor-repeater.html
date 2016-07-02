@@ -32,15 +32,16 @@ Example:
     <content></content>
     <template is="dom-repeat" items="[[propertyArray]]">
       <qea-property-editor on-value-changed="_notifyChanges"
-        name=[[item.name]]
-        label=[[item.label]]
-        type=[[item.type]]
-        widget-Type=[[item.widgetType]]
-        description=[[item.description]]
-        default=[[item.default]]
-        value={{item.value}}
-        is-Advanced-Property=[[item.isAdvancedProperty]]
-        is-Advanced-User=[[isAdvancedUser]]
+        name="[[item.name]]"
+        label="[[item.label]]"
+        type="[[item.type]]"
+        widget-Type="[[item.widgetType]]"
+        options="[[item.otions]]"
+        description="[[item.description]]"
+        default="[[item.default]]"
+        value="{{item.value}}"
+        is-Advanced-Property="[[item.isAdvancedProperty]]"
+        is-Advanced-User="[[isAdvancedUser]]"
       ></qea-property-editor>
     </template>
 
