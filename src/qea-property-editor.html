@@ -232,7 +232,8 @@ Example:
           */
           options: {
             type: String,
-            value: ''
+            value: '',
+            observer: '_setOptions'
           },
 
           /**
@@ -343,7 +344,7 @@ Example:
             }
             break;
           case 'enum':
-            this._enum = this.options.split(',');
+
             if (defaultValue && this._enum.indexOf(defaultValue)> -1) {
               this.value = this.value || defaultValue;
             }else {
@@ -380,7 +381,17 @@ Example:
        }
      }
 
+     _setOptions(options=''){
+       if (!this.options) {
+         console.error('no options defined for enum type');
+         return;
+       }
+       this._enum = options.split(',');
+     }
+
     }
+
+
 
     Polymer(qeaPropertyEditor);
   })()

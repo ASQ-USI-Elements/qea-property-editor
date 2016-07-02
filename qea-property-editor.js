@@ -98,7 +98,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           */
           options: {
             type: String,
-            value: ''
+            value: '',
+            observer: '_setOptions'
           },
 
           /**
@@ -223,7 +224,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
             break;
           case 'enum':
-            this._enum = this.options.split(',');
+
             if (defaultValue && this._enum.indexOf(defaultValue) > -1) {
               this.value = this.value || defaultValue;
             } else {
@@ -260,6 +261,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         } else {
           console.error("no editor founded. remember to include the qea-advanced-editors file");
         }
+      }
+    }, {
+      key: '_setOptions',
+      value: function _setOptions() {
+        var options = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
+
+        if (!this.options) {
+          console.error('no options defined for enum type');
+          return;
+        }
+        this._enum = options.split(',');
       }
     }, {
       key: 'behaviors',
