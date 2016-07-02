@@ -267,6 +267,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       value: function _setOptions() {
         var options = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
 
+        if (this.type && this.type.toLowerCase() !== 'enum') {
+          return;
+        }
         if (!this.options) {
           console.error('no options defined for enum type');
           return;

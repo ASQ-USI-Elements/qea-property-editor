@@ -382,6 +382,7 @@ Example:
      }
 
      _setOptions(options=''){
+       if (this.type && this.type.toLowerCase() !== 'enum') {return}
        if (!this.options) {
          console.error('no options defined for enum type');
          return;
