@@ -145,6 +145,7 @@
       openDialog(content, type, noWrap = false){
         this.noWrap = noWrap;
         this._isOpen = true;
+        this._selected = 0
         this._selectPage(type, content);
         return new Promise(
          (resolve)=>  {

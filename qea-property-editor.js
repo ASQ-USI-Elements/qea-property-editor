@@ -68,6 +68,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             observer: '_setInitialValue'
           },
 
+          /**
+          * return value of the editor
+          */
           value: {
             notify: true,
             observer: '_applyProperty'
@@ -82,9 +85,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: 'false'
           },
 
+          /**
+          * if true, the code editor will not wrap the return values into <pre><code> tags
+          */
           noWrap: {
             type: Boolean,
             value: false
+          },
+
+          /**
+          * list of options for enum type
+          */
+          options: {
+            type: String,
+            value: ''
           },
 
           /**
@@ -209,7 +223,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
             break;
           case 'enum':
-            this._enum = defaultValue.split(',');
+            this._enum = this.options.split(',');
+            if (defaultValue && this._enum.indexOf(defaultValue) > -1) {
+              this.value = this.value || defaultValue;
+            } else {
+              this.value = this.value || '';
+            }
             break;
           default:
 
@@ -232,8 +251,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         var advancedEditors = Polymer.dom(this.parentNode).querySelector('qea-advanced-editors');
         if (advancedEditors) {
-          var c = this.default || '';
-          advancedEditors.openDialog(c, this.widgetType, this.noWrap).then(function (result) {
+          var value = this.value || this.default || '';
+          advancedEditors.openDialog(value, this.widgetType, this.noWrap).then(function (result) {
             if (result) {
               _this.value = result;
             }

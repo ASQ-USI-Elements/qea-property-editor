@@ -98,6 +98,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         this.noWrap = noWrap;
         this._isOpen = true;
+        this._selected = 0;
         this._selectPage(type, content);
         return new Promise(function (resolve) {
           var self = _this;

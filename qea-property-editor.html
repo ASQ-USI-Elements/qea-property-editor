@@ -106,11 +106,11 @@ Example:
 
         <!-- enum -->
         <template is="dom-if" if="[[_showEnum(type)]]">
-          <div class="setter" style="margin-top: -14px; padding-top: 0;">
-            <paper-dropdown-menu selected-item-label="{{value}}" toggles="">
-              <paper-listbox class="dropdown-content">
+          <div class="setter" style="margin-top: -14px; padding-top: 0;" id="enum">
+            <paper-dropdown-menu id="pdm" toggles="" label="select an item">
+              <paper-listbox class="dropdown-content" attr-for-selected="name" selected="{{value}}">
                 <template is="dom-repeat" items="[[_enum]]">
-                  <paper-item>[[item]]</paper-item>
+                  <paper-item name="[[item]]">[[item]]</paper-item>
                 </template>
               </paper-listbox>
             </paper-dropdown-menu>

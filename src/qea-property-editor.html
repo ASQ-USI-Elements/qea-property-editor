@@ -114,11 +114,12 @@ Example:
 
         <!-- enum -->
         <template is="dom-if" if="[[_showEnum(type)]]">
-          <div class="setter" style="margin-top: -14px; padding-top: 0;">
-            <paper-dropdown-menu  selected-Item-Label={{value}} toggles>
-              <paper-listbox class="dropdown-content">
+          <div class="setter" style="margin-top: -14px; padding-top: 0;" id="enum">
+            <paper-dropdown-menu id="pdm"
+              toggles label="select an item" >
+              <paper-listbox class="dropdown-content" attr-for-selected="name" selected="{{value}}">
                 <template is="dom-repeat" items="[[_enum]]">
-                  <paper-item>[[item]]</paper-item>
+                  <paper-item name="[[item]]">[[item]]</paper-item>
                 </template>
               </paper-listbox>
             </paper-dropdown-menu>
@@ -201,6 +202,9 @@ Example:
             observer: '_setInitialValue'
           },
 
+          /**
+          * return value of the editor
+          */
           value: {
             notify: true,
             observer: '_applyProperty'
@@ -215,9 +219,20 @@ Example:
             value: 'false'
           },
 
+          /**
+          * if true, the code editor will not wrap the return values into <pre><code> tags
+          */
           noWrap: {
             type: Boolean,
             value: false
+          },
+
+          /**
+          * list of options for enum type
+          */
+          options: {
+            type: String,
+            value: ''
           },
 
           /**
@@ -328,7 +343,12 @@ Example:
             }
             break;
           case 'enum':
-            this._enum = defaultValue.split(',');
+            this._enum = this.options.split(',');
+            if (defaultValue && this._enum.indexOf(defaultValue)> -1) {
+              this.value = this.value || defaultValue;
+            }else {
+              this.value = this.value || '';
+            }
             break;
           default:
 
@@ -347,8 +367,8 @@ Example:
      _openAdvancedEdit(){
        let advancedEditors = Polymer.dom(this.parentNode).querySelector('qea-advanced-editors')
        if (advancedEditors) {
-         let c = this.default || '';
-         advancedEditors.openDialog(c, this.widgetType, this.noWrap).then(
+         let value = this.value || this.default || '';
+         advancedEditors.openDialog(value, this.widgetType, this.noWrap).then(
            (result)=>{
              if (result) {
                this.value = result;
