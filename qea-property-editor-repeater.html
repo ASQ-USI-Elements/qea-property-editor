@@ -25,37 +25,36 @@ Example:
 <dom-module id="qea-property-editor-repeater">
   <template>
     <style>
-      :host {
-        display: block;
-      }
-    </style>
-    <content></content>
-    <template is="dom-repeat" items="[[propertyArray]]">
-      <qea-property-editor on-value-changed="_notifyChanges"
-        name="[[item.name]]"
-        label="[[item.label]]"
-        type="[[item.type]]"
-        widget-Type="[[item.widgetType]]"
-        options="[[item.options]]"
-        description="[[item.description]]"
-        default="[[item.default]]"
-        value="{{item.value}}"
-        is-Advanced-Property="[[item.isAdvancedProperty]]"
-        is-Advanced-User="[[isAdvancedUser]]"
-      ></qea-property-editor>
-    </template>
-
-
+    :host {
+      display: block;
+    }
+  </style>
+  <content></content>
+  <template is="dom-repeat" items="[[propertyArray]]">
+    <qea-property-editor on-value-changed="_notifyChanges"
+    name="[[item.name]]"
+    label="[[item.label]]"
+    type="[[item.type]]"
+    widget-Type="[[item.widgetType]]"
+    options="[[item.options]]"
+    description="[[item.description]]"
+    default="[[item.default]]"
+    value="{{item.value}}"
+    is-Advanced-Property="[[item.isAdvancedProperty]]"
+    is-Advanced-User="[[isAdvancedUser]]"
+    ></qea-property-editor>
   </template>
-  <script>
+
+
+</template>
+<script>
   (function () {
     'use strict';
 
     Polymer({
-      beforeRegister(){
-        this.is = 'qea-property-editor-repeater',
-        behaviors: [],
-        this.properties = {
+      is: 'qea-property-editor-repeater',
+      behaviors: [],
+      properties: {
           /**
           * Array of objects represented all the properties
           */
@@ -83,8 +82,7 @@ Example:
           isAdvancedUser:{
             type: String
           }
-        }
-      },
+        },
 
       // function here
       _valuesCreator: function(propertyArray){
@@ -108,5 +106,5 @@ Example:
 
     });
   })();
-  </script>
+</script>
 </dom-module>

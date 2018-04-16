@@ -43,111 +43,110 @@ Example:
 <dom-module id="qea-property-editor">
   <template>
     <style>
-      :host {
-        display: block;
-      }
-      .propContainer{
-        color: rgba(0, 0, 0, 0.7);
-        margin: 10px 0;
-      }
-      .label{
+    :host {
+      display: block;
+    }
+    .propContainer{
+      color: rgba(0, 0, 0, 0.7);
+      margin: 10px 0;
+    }
+    .label{
 
-      }
-      .setter{
-        padding-top: 5px;
-        padding-left: 15px;
-        max-width: 70%;
-      }
-      #infoIcon{
-        width:20px;
-        color:#BDBDBD;
-        cursor: pointer;
-        background: transparent;
-      }
-      #infoIcon:hover{
-        color: #424242;
-      }
-    </style>
-    <template is="dom-if" if="[[_isPropertyVisible]]">
-      <div class="propContainer">
+    }
+    .setter{
+      padding-top: 5px;
+      padding-left: 15px;
+      max-width: 70%;
+    }
+    #infoIcon{
+      width:20px;
+      color:#BDBDBD;
+      cursor: pointer;
+      background: transparent;
+    }
+    #infoIcon:hover{
+      color: #424242;
+    }
+  </style>
+  <template is="dom-if" if="[[_isPropertyVisible]]">
+    <div class="propContainer">
 
-        <div class="label">
-          <span>[[_nameToVisualize]]</span>
-          <paper-tooltip for="infoIcon" fit-To-Visible-Bounds>[[description]]</paper-tooltip>
-          <iron-icon id="infoIcon" icon="icons:info-outline" hidden$="{{_showDescription}}"></iron-icon>
-        </div>
+      <div class="label">
+        <span>[[_nameToVisualize]]</span>
+        <paper-tooltip for="infoIcon" fit-To-Visible-Bounds>[[description]]</paper-tooltip>
+        <iron-icon id="infoIcon" icon="icons:info-outline" hidden$="{{_showDescription}}"></iron-icon>
+      </div>
 
-        <!-- string -->
-        <template is="dom-if" if="[[_showString(type, 'simple')]]">
-          <div class="setter">
-            <paper-input label="Input label"
-              no-label-float
-              value={{value}}>
-            </paper-input>
-          </div>
-        </template>
-        <template is="dom-if" if="[[_showString(type, 'advanced')]]">
-          <div class="setter">
-            <paper-button raised on-tap='_openAdvancedEdit'>open editor</paper-button>
-          </div>
-        </template>
-
-        <!-- number -->
-        <template is="dom-if" if="[[_showNumber(type, 'simple')]]">
-          <div class="setter">
-            <paper-input label="Input label"
-              no-label-float
-              type='number'
-              value={{value}}>
-            </paper-input>
-          </div>
-        </template>
-        <template is="dom-if" if="[[_showNumber(type, 'range')]]">
-          <div class="setter">
-            <paper-slider editable expand
-              min=[[_slider.min]]
-              max=[[_slider.max]]
-              value={{value}}>
-            </paper-slider>
-          </div>
-        </template>
-
-        <!-- enum -->
-        <template is="dom-if" if="[[_showEnum(type)]]">
-          <div class="setter" style="margin-top: -14px; padding-top: 0;" id="enum">
-            <paper-dropdown-menu id="pdm"
-              toggles label="select an item" >
-              <paper-listbox class="dropdown-content" attr-for-selected="name" selected="{{value}}">
-                <template is="dom-repeat" items="[[_enum]]">
-                  <paper-item name="[[item]]">[[item]]</paper-item>
-                </template>
-              </paper-listbox>
-            </paper-dropdown-menu>
-          </div>
-        </template>
-
-        <!-- boolean -->
-        <template is="dom-if" if="[[_showBoolean(type)]]">
-          <div class="setter">
-            <paper-toggle-button
-              checked={{value}}>
-            </paper-toggle-button>
-          </div>
-        </template>
-
+      <!-- string -->
+      <template is="dom-if" if="[[_showString(type, 'simple')]]">
+        <div class="setter">
+          <paper-input label="Input label"
+          no-label-float
+          value={{value}}>
+        </paper-input>
+      </div>
+    </template>
+    <template is="dom-if" if="[[_showString(type, 'advanced')]]">
+      <div class="setter">
+        <paper-button raised on-tap='_openAdvancedEdit'>open editor</paper-button>
+      </div>
     </template>
 
+    <!-- number -->
+    <template is="dom-if" if="[[_showNumber(type, 'simple')]]">
+      <div class="setter">
+        <paper-input label="Input label"
+        no-label-float
+        type='number'
+        value={{value}}>
+      </paper-input>
+    </div>
   </template>
-  <script>
+  <template is="dom-if" if="[[_showNumber(type, 'range')]]">
+    <div class="setter">
+      <paper-slider editable expand
+      min=[[_slider.min]]
+      max=[[_slider.max]]
+      value={{value}}>
+    </paper-slider>
+  </div>
+</template>
+
+<!-- enum -->
+<template is="dom-if" if="[[_showEnum(type)]]">
+  <div class="setter" style="margin-top: -14px; padding-top: 0;" id="enum">
+    <paper-dropdown-menu id="pdm"
+    toggles label="select an item" >
+    <paper-listbox class="dropdown-content" attr-for-selected="name" selected="{{value}}">
+      <template is="dom-repeat" items="[[_enum]]">
+        <paper-item name="[[item]]">[[item]]</paper-item>
+      </template>
+    </paper-listbox>
+  </paper-dropdown-menu>
+</div>
+</template>
+
+<!-- boolean -->
+<template is="dom-if" if="[[_showBoolean(type)]]">
+  <div class="setter">
+    <paper-toggle-button
+    checked={{value}}>
+  </paper-toggle-button>
+</div>
+</template>
+
+</template>
+
+</template>
+<script>
   (function () {
     'use strict';
 
     Polymer({
 
-      beforeRegister(){
-        this.is = 'qea-property-editor',
-        behaviors: [],
-        this.properties = {
+      is: 'qea-property-editor',
+      behaviors: [],
+      properties: {
           /**
           * Name of the property
           */
@@ -267,87 +266,86 @@ Example:
             value: true,
             computed: '_showDesc(description)'
           }
-        }
-      },
+        },
 
-      _showDesc: function(desc){
-        return desc ? false: true;
-      },
+        _showDesc: function(desc){
+          return desc ? false: true;
+        },
 
-      _isAcceptableType: function(type, isAdvancedUser){
-        let availableType = ['boolean','string','number','enum'].indexOf(type.toLowerCase()) > -1;
-        let isAdvUs = (isAdvancedUser.toLowerCase() == 'true');
-        let isAdvPr = (this.isAdvancedProperty && this.isAdvancedProperty.toLowerCase() == 'true');
+        _isAcceptableType: function(type, isAdvancedUser){
+          let availableType = ['boolean','string','number','enum'].indexOf(type.toLowerCase()) > -1;
+          let isAdvUs = (isAdvancedUser.toLowerCase() == 'true');
+          let isAdvPr = (this.isAdvancedProperty && this.isAdvancedProperty.toLowerCase() == 'true');
 
-        return availableType && ((isAdvUs === isAdvPr )|| !isAdvPr);
-      },
+          return availableType && ((isAdvUs === isAdvPr )|| !isAdvPr);
+        },
 
-      _showNumber: function(type, inputKind='simple'){
-        if (type.toLowerCase() === 'number' && this.widgetType == inputKind) {
-          return true;
-        }else if (type.toLowerCase() === 'number' && !this.widgetType && inputKind == 'simple') {
-          return true;
-        }
-        return false;
-      },
+        _showNumber: function(type, inputKind='simple'){
+          if (type.toLowerCase() === 'number' && this.widgetType == inputKind) {
+            return true;
+          }else if (type.toLowerCase() === 'number' && !this.widgetType && inputKind == 'simple') {
+            return true;
+          }
+          return false;
+        },
 
-      _showString: function(type, templateType){
-        let general = type.toLowerCase() === 'string';
-        if (!general) {return false;}
-        let withWidget = (this.widgetType && ['code','richtext','text-code'].indexOf(this.widgetType.toLowerCase())>-1);
-        if (withWidget && templateType == 'advanced') {
-          return true;
-        }
-        if (!withWidget && templateType == 'simple') {
-          return true;
-        }
+        _showString: function(type, templateType){
+          let general = type.toLowerCase() === 'string';
+          if (!general) {return false;}
+          let withWidget = (this.widgetType && ['code','richtext','text-code'].indexOf(this.widgetType.toLowerCase())>-1);
+          if (withWidget && templateType == 'advanced') {
+            return true;
+          }
+          if (!withWidget && templateType == 'simple') {
+            return true;
+          }
 
-      },
+        },
 
-      _showEnum: function(type){
-        return type.toLowerCase() === 'enum';
-      },
+        _showEnum: function(type){
+          return type.toLowerCase() === 'enum';
+        },
 
-      _showBoolean: function(type){
-        return type.toLowerCase() === 'boolean';
-      },
+        _showBoolean: function(type){
+          return type.toLowerCase() === 'boolean';
+        },
 
-      _nameChooser: function(name){
-        let label = this.label || ''
-        return label === '' ? name : label;
-      },
+        _nameChooser: function(name){
+          let label = this.label || ''
+          return label === '' ? name : label;
+        },
 
-      _setInitialValue: function(defaultValue){
+        _setInitialValue: function(defaultValue){
         // boolean | string | number | enum
         // colour | richText  | range | code
         switch (this.type.toLowerCase()) {
           case 'boolean':
-            this.value = defaultValue == 'true';
-            break;
+          this.value = defaultValue == 'true';
+          break;
           case 'string':
-            if (this.widgetType &&
-              ['colour','richText','code'].indexOf(this.widgetType.toLowerCase()) > -1) {
+          if (this.widgetType &&
+            ['colour','richText','code'].indexOf(this.widgetType.toLowerCase()) > -1) {
               // set advance editor
-            }else {
-              this.value = defaultValue;
-            }
-            break;
+          }else {
+            this.value = defaultValue;
+          }
+          break;
           case 'number':
-            if (this.widgetType && this.widgetType.toLowerCase() === 'range') {
-              let values = defaultValue.split('-')
-              this._slider = {min: Number(values[0]), max: Number(values[1])}
-            }else {
-              this.value = defaultValue;
-            }
-            break;
+          if (this.widgetType && this.widgetType.toLowerCase() === 'range') {
+            let values = defaultValue.split('-')
+            this._slider = {min: Number(values[0]), max: Number(values[1])}
+          }else {
+            this.value = defaultValue;
+          }
+          break;
           case 'enum':
 
-            if (defaultValue && this._enum.indexOf(defaultValue)> -1) {
-              this.value = this.value || defaultValue;
-            }else {
-              this.value = this.value || '';
-            }
-            break;
+          if (defaultValue && this._enum.indexOf(defaultValue)> -1) {
+            this.value = this.value || defaultValue;
+          }else {
+            this.value = this.value || '';
+          }
+          break;
           default:
 
         }
@@ -362,7 +360,7 @@ Example:
         }
       },
 
-     _openAdvancedEdit: function(){
+      _openAdvancedEdit: function(){
        let advancedEditors = Polymer.dom(this.parentNode).querySelector('qea-advanced-editors')
        if (advancedEditors) {
          let value = this.value || this.default || '';
@@ -372,7 +370,7 @@ Example:
                this.value = result;
              }
            }
-         )
+           )
        }else {
          console.error("no editor founded. remember to include the qea-advanced-editors file");
        }
@@ -380,14 +378,14 @@ Example:
 
      _setOptions: function(options=''){
        if (this.type && this.type.toLowerCase() !== 'enum') {return}
-       if (!this.options) {
-         console.error('no options defined for enum type');
-         return;
+         if (!this.options) {
+           console.error('no options defined for enum type');
+           return;
+         }
+         this._enum = options.split(',');
        }
-       this._enum = options.split(',');
-     }
 
-    });
-  })();
-  </script>
+     });
+})();
+</script>
 </dom-module>
