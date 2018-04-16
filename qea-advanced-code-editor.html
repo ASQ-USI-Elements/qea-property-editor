@@ -5,101 +5,95 @@
 <dom-module id="qea-advanced-code-editor">
   <template>
     <style>
-      :host {
-        display: block;
-      }
-      .editor{
-        position: relative;
-        width: 600px;
-        height: 500px;
-      }
-      #myDialog{
-        padding-top: 0;
-      }
-    </style>
+    :host {
+      display: block;
+    }
+    .editor{
+      position: relative;
+      width: 600px;
+      height: 500px;
+    }
+    #myDialog{
+      padding-top: 0;
+    }
+  </style>
 
-    <paper-dialog opened={{isDialogOpen}} on-iron-overlay-canceled='_preventCancellation'  id='myDialog' >
-      <h2>[[label]]</h2>
+  <paper-dialog opened={{isDialogOpen}} on-iron-overlay-canceled='_preventCancellation'  id='myDialog' >
+    <h2>[[label]]</h2>
 
-      <div class="editor">
-        <ace-element id='aceEditor'
-          font-Size="{{fontSize}}"
-          mode="{{mode}}"
-          tabSize="{{tabSize}}"
-          readonly="{{readonly}}"
-          theme="{{theme}}" ></ace-element>
-      </div>
+    <div class="editor">
+      <ace-element id='aceEditor'
+      font-Size="{{fontSize}}"
+      mode="{{mode}}"
+      tabSize="{{tabSize}}"
+      readonly="{{readonly}}"
+      theme="{{theme}}" ></ace-element>
+    </div>
 
-      <div class="buttons">
-        <paper-button dialog-dismiss id="cancell">Cancel</paper-button>
-        <paper-button dialog-confirm id='accept'>Accept</paper-button>
-      </div>
-    </paper-dialog>
-  </template>
-  <script>
+    <div class="buttons">
+      <paper-button dialog-dismiss id="cancell">Cancel</paper-button>
+      <paper-button dialog-confirm id='accept'>Accept</paper-button>
+    </div>
+  </paper-dialog>
+</template>
+<script>
   (function () {
     'use strict';
 
-    class qeaAdvancedCodeEditor {
-
-      get behaviors() {
-        return [];
-      }
-
-      beforeRegister() {
-        this.is = 'qea-advanced-code-editor';
-        this.properties = {
-          label: {
-            type: String,
-            value: 'Create or modify code'
-          },
-          isDialogOpen: {
-            notify: true,
-            type: Boolean,
-            value: false
-          },
-          theme: {
-            notify: true,
-            type: String,
-            value: 'chrome'
-          },
-          fontSize: {
-            notify: true,
-            type: Number,
-            value: 12
-          },
-          mode: {
-            notify: true,
-            type: String,
-            value: 'html'
-          },
-          readonly: {
-            notify: true,
-            type: Boolean,
-            value: false
-          },
-          tabSize: {
-            notify: true,
-            value: 4,
-            type: Number
-          }
-        };
-      }
+    Polymer({
+      is: 'qea-advanced-code-editor',
+      behaviors: [],
+      properties: {
+        label: {
+          type: String,
+          value: 'Create or modify code'
+        },
+        isDialogOpen: {
+          notify: true,
+          type: Boolean,
+          value: false
+        },
+        theme: {
+          notify: true,
+          type: String,
+          value: 'chrome'
+        },
+        fontSize: {
+          notify: true,
+          type: Number,
+          value: 12
+        },
+        mode: {
+          notify: true,
+          type: String,
+          value: 'html'
+        },
+        readonly: {
+          notify: true,
+          type: Boolean,
+          value: false
+        },
+        tabSize: {
+          notify: true,
+          value: 4,
+          type: Number
+        }
+      },
 
       /**
       * prevent the cancellation of the dialog when opened the code inspector of
       * the text editor or click outside the dialog
       */
-      _preventCancellation(){
+      _preventCancellation: function(){
         event.preventDefault()
-      }
+      },
 
       /**
       * Promise use to open the advanced code dialog
       * @param content : if you whant to modify code
       * @return the text created or modified or null if user close the dialog
       */
-      openCodeDialog(content){
+      openCodeDialog: function(content){
         this.isDialogOpen = true;
         if (content) {
           this.$.aceEditor.editorValue = content;
@@ -118,12 +112,10 @@
            }
            this.$.myDialog.addEventListener('iron-overlay-closed', onIronOverlayClosed);
          }
-        )
-     }
+         )
+      }
 
-    }
-
-    Polymer(qeaAdvancedCodeEditor);
+    });
   })();
-  </script>
+</script>
 </dom-module>

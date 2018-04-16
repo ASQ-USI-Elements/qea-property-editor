@@ -36,17 +36,13 @@ Example:
   </template>
   <script>
   (function () {
-    'use strict'
+    'use strict';
 
-    class qeaAdvancedTextEditor {
+    Polymer({
 
-      get behaviors() {
-        return [];
-      }
-
-      beforeRegister(){
-        this.is = 'qea-advanced-text-editor'
-        this.properties = {
+        is: 'qea-advanced-text-editor',
+        behaviors: [],
+        properties: {
           /**
           * notify the state of the dialog. true means open
           * readOnly
@@ -60,34 +56,33 @@ Example:
             type: String,
             value: this._idGenerator()
           }
-        }
-      }
+        },
 
       /**
       * prevent the cancellation of the dialog when opened the code inspector of
       * the text editor or click outside the dialog
       */
-      _preventCancellation(){
+      _preventCancellation: function(){
         event.preventDefault()
-      }
+      },
 
       /**
       * @return content (innerHtml) of text editor
       */
-      getContent(){
+      getContent: function(){
         return this.$.editor.getContent();
-      }
+      },
 
-      _setContent(content){
+      _setContent: function(content){
         this.$.editor.setContent(content);
-      }
+      },
 
       /**
       * Promise use to open the advanced text dialog
       * @param content : if you whant to modify text pass it as string
       * @return the text created or modified or null if user close the dialog
       */
-      openTextDialog(content){
+      openTextDialog: function(content){
         this.isDialogOpen = true;
         if (content) {
           this._setContent(content);
@@ -107,9 +102,9 @@ Example:
            this.$.myDialog.addEventListener('iron-overlay-closed', onIronOverlayClosed);
          }
         )
-     }
+     },
 
-     _idGenerator() {
+     _idGenerator: function() {
        const s4 = () => {
          return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
        };
@@ -117,9 +112,7 @@ Example:
      }
 
 
-    }
-
-    Polymer(qeaAdvancedTextEditor);
-  })()
+    });
+  })();
   </script>
 </dom-module>

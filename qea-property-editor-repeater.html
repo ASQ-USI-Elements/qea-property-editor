@@ -49,16 +49,12 @@ Example:
   </template>
   <script>
   (function () {
-    'use strict'
+    'use strict';
 
-    class qeaPropertyEditorRepeater {
-
-      get behaviors() {
-        return [];
-      }
-
+    Polymer({
       beforeRegister(){
-        this.is = 'qea-property-editor-repeater'
+        this.is = 'qea-property-editor-repeater',
+        behaviors: [],
         this.properties = {
           /**
           * Array of objects represented all the properties
@@ -88,18 +84,18 @@ Example:
             type: String
           }
         }
-      }
+      },
 
       // function here
-      _valuesCreator(propertyArray){
+      _valuesCreator: function(propertyArray){
         let values = {};
         for (let prop of propertyArray) {
           values[prop.name] = null;
         }
         this.values = values;
-      }
+      },
 
-      _notifyChanges(e){
+      _notifyChanges: function(e){
         let propName = e.target.name;
 
         let value = e.detail.value;
@@ -110,9 +106,7 @@ Example:
         }
       }
 
-    }
-
-    Polymer(qeaPropertyEditorRepeater);
-  })()
+    });
+  })();
   </script>
 </dom-module>

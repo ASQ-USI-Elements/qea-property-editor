@@ -140,16 +140,13 @@ Example:
   </template>
   <script>
   (function () {
-    'use strict'
+    'use strict';
 
-    class qeaPropertyEditor {
-
-      get behaviors() {
-        return [];
-      }
+    Polymer({
 
       beforeRegister(){
-        this.is = 'qea-property-editor'
+        this.is = 'qea-property-editor',
+        behaviors: [],
         this.properties = {
           /**
           * Name of the property
@@ -271,30 +268,30 @@ Example:
             computed: '_showDesc(description)'
           }
         }
-      }
+      },
 
-      _showDesc(desc){
+      _showDesc: function(desc){
         return desc ? false: true;
-      }
+      },
 
-      _isAcceptableType(type, isAdvancedUser){
+      _isAcceptableType: function(type, isAdvancedUser){
         let availableType = ['boolean','string','number','enum'].indexOf(type.toLowerCase()) > -1;
         let isAdvUs = (isAdvancedUser.toLowerCase() == 'true');
         let isAdvPr = (this.isAdvancedProperty && this.isAdvancedProperty.toLowerCase() == 'true');
 
         return availableType && ((isAdvUs === isAdvPr )|| !isAdvPr);
-      }
+      },
 
-      _showNumber(type, inputKind='simple'){
+      _showNumber: function(type, inputKind='simple'){
         if (type.toLowerCase() === 'number' && this.widgetType == inputKind) {
           return true;
         }else if (type.toLowerCase() === 'number' && !this.widgetType && inputKind == 'simple') {
           return true;
         }
         return false;
-      }
+      },
 
-      _showString(type, templateType){
+      _showString: function(type, templateType){
         let general = type.toLowerCase() === 'string';
         if (!general) {return false;}
         let withWidget = (this.widgetType && ['code','richtext','text-code'].indexOf(this.widgetType.toLowerCase())>-1);
@@ -305,22 +302,22 @@ Example:
           return true;
         }
 
-      }
+      },
 
-      _showEnum(type){
+      _showEnum: function(type){
         return type.toLowerCase() === 'enum';
-      }
+      },
 
-      _showBoolean(type){
+      _showBoolean: function(type){
         return type.toLowerCase() === 'boolean';
-      }
+      },
 
-      _nameChooser(name){
+      _nameChooser: function(name){
         let label = this.label || ''
         return label === '' ? name : label;
-      }
+      },
 
-      _setInitialValue(defaultValue){
+      _setInitialValue: function(defaultValue){
         // boolean | string | number | enum
         // colour | richText  | range | code
         switch (this.type.toLowerCase()) {
@@ -354,18 +351,18 @@ Example:
           default:
 
         }
-      }
+      },
 
-      _applyProperty(value , old){
+      _applyProperty: function(value , old){
         if (value === undefined && old !== undefined) {
           this.value = old
         }
         if (this.referenceId && this.referenceId !== '') {
           Polymer.dom(this.parentNode).querySelector(`#${this.referenceId}`)[this.name]=value;
         }
-      }
+      },
 
-     _openAdvancedEdit(){
+     _openAdvancedEdit: function(){
        let advancedEditors = Polymer.dom(this.parentNode).querySelector('qea-advanced-editors')
        if (advancedEditors) {
          let value = this.value || this.default || '';
@@ -379,9 +376,9 @@ Example:
        }else {
          console.error("no editor founded. remember to include the qea-advanced-editors file");
        }
-     }
+     },
 
-     _setOptions(options=''){
+     _setOptions: function(options=''){
        if (this.type && this.type.toLowerCase() !== 'enum') {return}
        if (!this.options) {
          console.error('no options defined for enum type');
@@ -390,11 +387,7 @@ Example:
        this._enum = options.split(',');
      }
 
-    }
-
-
-
-    Polymer(qeaPropertyEditor);
-  })()
+    });
+  })();
   </script>
 </dom-module>
