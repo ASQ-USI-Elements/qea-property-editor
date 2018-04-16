@@ -1,4 +1,4 @@
-<html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../paper-tabs/paper-tabs.html">
 <link rel="import" href="../paper-dialog/paper-dialog.html">
 <link rel="import" href="../iron-pages/iron-pages.html">
@@ -7,7 +7,7 @@
 <link rel="import" href="../paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../paper-listbox/paper-listbox.html">
 
-</head><body><dom-module id="qea-advanced-editors">
+<dom-module id="qea-advanced-editors">
   <template>
     <style>
       :host {
@@ -28,11 +28,11 @@
       }
     </style>
 
-    <paper-dialog opened="{{_isOpen}}" on-iron-overlay-canceled="_preventCancellation" id="myDialog">
+    <paper-dialog opened={{_isOpen}} on-iron-overlay-canceled='_preventCancellation' id='myDialog'>
       <!-- nav bar -->
-      <paper-tabs selected="{{_selected}}" noink="">
-        <paper-tab hidden$="[[_disabled.text]]" disabled="[[_disabled.text]]">Text editor</paper-tab>
-        <paper-tab hidden$="[[_disabled.code]]" disabled="[[_disabled.code]]">Code editor</paper-tab>
+      <paper-tabs selected="{{_selected}}" noink>
+        <paper-tab hidden$=[[_disabled.text]] disabled=[[_disabled.text]]>Text editor</paper-tab>
+        <paper-tab hidden$=[[_disabled.code]] disabled=[[_disabled.code]]>Code editor</paper-tab>
       </paper-tabs>
 
       <!--pages  -->
@@ -40,13 +40,17 @@
 
         <!-- text editor -->
         <section id="textSection">
-          <polymer-tinymce id="textEditor" textarea-id="[[textId]]" tinytoolbar="insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent| fontsizeselect | link image | forecolor backcolor" tinyplugins="[&quot;advlist autolink lists link image charmap print preview anchor&quot;,&quot;searchreplace visualblocks code fullscreen&quot;,&quot;insertdatetime media table contextmenu paste&quot;,&quot;textcolor&quot; ]"></polymer-tinymce>
+          <polymer-tinymce id="textEditor"
+            textarea-id="[[textId]]"
+            tinytoolbar="insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent| fontsizeselect | link image | forecolor backcolor"
+            tinyplugins='["advlist autolink lists link image charmap print preview anchor","searchreplace visualblocks code fullscreen","insertdatetime media table contextmenu paste","textcolor" ]'
+          ></polymer-tinymce>
         </section>
 
         <!-- code editor -->
         <section id="codeSection">
           <div id="editor">
-            <ace-element id="aceEditor" theme="textmate"></ace-element>
+            <ace-element id='aceEditor' theme="textmate" ></ace-element>
           </div>
         </section>
 
@@ -54,10 +58,122 @@
 
       <!-- dialog buttons -->
       <div class="buttons">
-        <paper-button dialog-dismiss="">Cancel</paper-button>
-        <paper-button dialog-confirm="">Accept</paper-button>
+        <paper-button dialog-dismiss>Cancel</paper-button>
+        <paper-button dialog-confirm>Accept</paper-button>
       </div>
     </paper-dialog>
   </template>
-  </dom-module>
-<script src="qea-advanced-editors.js"></script></body></html>
+  <script>
+  (function () {
+    'use strict'
+
+    class qeaAdvancedEditors {
+
+      get behaviors() {
+        return [];
+      }
+
+      beforeRegister(){
+        this.is = 'qea-advanced-editors'
+        this.properties = {
+          _isOpen:{
+            type: Boolean,
+            value: false
+          },
+          _disabled:{
+            type:Object,
+            value:()=>{return{text:false, code:false}}
+          },
+          _selected:{
+            type: Number,
+            value:0
+          },
+          /**
+          * if true the return value will not be wrapped inside
+          * <pre><code>...</code></pre>
+          */
+          noWrap :{
+            type: Boolean,
+            value: false
+          },
+          textId: {
+            type: String,
+            value: this._idGenerator()
+          }
+        }
+      }
+
+      _preventCancellation(){
+        event.preventDefault()
+      }
+
+      _selectPage(type='text-code', content=''){
+        switch (type.toLowerCase()) {
+          case 'richtext':
+            this.set('_disabled.code', true);
+            this._selected = 0;
+            this.$.textEditor.setContent(content)
+            break;
+          case 'code':
+            this.set('_disabled.text', true);
+            this._selected = 1;
+            this.$.aceEditor.editorValue = content;
+            break;
+          default:
+            this.set('_disabled.code', false);
+            this.set('_disabled.text', false);
+            this.$.textEditor.setContent(content)
+            this.$.aceEditor.editorValue = content;
+        }
+      }
+
+      _getContent(){
+        let content = '';
+        if (this._selected == 0) {
+          content = this.$.textEditor.getContent();
+        }else {
+          if (this.noWrap) {
+            content = this.$.aceEditor.editorValue;
+          } else {
+            content = `<pre><code>${this.$.aceEditor.editorValue}</code></pre>`;
+          }
+        }
+        return content;
+      }
+
+
+      openDialog(content, type, noWrap = false){
+        this.noWrap = noWrap;
+        this._isOpen = true;
+        this._selected = 0
+        this._selectPage(type, content);
+        return new Promise(
+         (resolve)=>  {
+           const self = this
+           function onIronOverlayClosed(e){
+             let result = null;
+             if(e.detail.confirmed){
+               result = self._getContent();
+             }
+             e.target.removeEventListener('iron-overlay-closed', onIronOverlayClosed);
+             resolve(result);
+           }
+           this.$.myDialog.addEventListener('iron-overlay-closed', onIronOverlayClosed);
+         }
+        )
+     }
+
+     _idGenerator() {
+       const s4 = () => {
+         return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+       };
+       return `textId${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4() + s4() + s4()}`;
+     }
+
+
+    }
+
+    Polymer(qeaAdvancedEditors);
+  })()
+  </script>
+</dom-module>
