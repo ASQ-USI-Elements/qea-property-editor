@@ -54,7 +54,9 @@ Example:
           },
           textId: {
             type: String,
-            value: this._idGenerator()
+                        value: function() {
+              return this._idGenerator()
+            }
           }
         },
 
