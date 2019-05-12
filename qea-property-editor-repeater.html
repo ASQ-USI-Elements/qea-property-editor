@@ -1,4 +1,4 @@
-<html><head><link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="./qea-property-editor.html">
 
 <!--
@@ -22,19 +22,89 @@ Example:
 -->
 
 
-</head><body><dom-module id="qea-property-editor-repeater">
+<dom-module id="qea-property-editor-repeater">
   <template>
     <style>
-      :host {
-        display: block;
-      }
-    </style>
-    <content></content>
-    <template is="dom-repeat" items="[[propertyArray]]">
-      <qea-property-editor on-value-changed="_notifyChanges" name="[[item.name]]" label="[[item.label]]" type="[[item.type]]" widget-type="[[item.widgetType]]" options="[[item.options]]" description="[[item.description]]" default="[[item.default]]" value="{{item.value}}" is-advanced-property="[[item.isAdvancedProperty]]" is-advanced-user="[[isAdvancedUser]]"></qea-property-editor>
-    </template>
-
-
+    :host {
+      display: block;
+    }
+  </style>
+  <content></content>
+  <template is="dom-repeat" items="[[propertyArray]]">
+    <qea-property-editor on-value-changed="_notifyChanges"
+    name="[[item.name]]"
+    label="[[item.label]]"
+    type="[[item.type]]"
+    widget-Type="[[item.widgetType]]"
+    options="[[item.options]]"
+    description="[[item.description]]"
+    default="[[item.default]]"
+    value="{{item.value}}"
+    is-Advanced-Property="[[item.isAdvancedProperty]]"
+    is-Advanced-User="[[isAdvancedUser]]"
+    ></qea-property-editor>
   </template>
-  </dom-module>
-<script src="qea-property-editor-repeater.js"></script></body></html>
+
+
+</template>
+<script>
+  (function () {
+    'use strict';
+
+    Polymer({
+      is: 'qea-property-editor-repeater',
+      behaviors: [],
+      properties: {
+          /**
+          * Array of objects represented all the properties
+          */
+          propertyArray:{
+            type: Array,
+            observer: '_valuesCreator'
+          },
+
+          /**
+          * Object containing the binded values of the properties.
+          * Object keys are the property names
+          * @notify true
+          * @type {{<propertyName>: value}}
+          */
+          values: {
+            type: Object,
+            value: ()=>{return{}},
+            notify: true
+          },
+
+          /**
+          * Property use to hide advanced property to normal users
+          * @default false
+          */
+          isAdvancedUser:{
+            type: String
+          }
+        },
+
+      // function here
+      _valuesCreator: function(propertyArray){
+        let values = {};
+        for (let prop of propertyArray) {
+          values[prop.name] = null;
+        }
+        this.values = values;
+      },
+
+      _notifyChanges: function(e){
+        let propName = e.target.name;
+
+        let value = e.detail.value;
+        let currentValues = this.values;
+        if (value != undefined && propName != undefined) {
+          currentValues[propName] = value
+          this.set('values', Object.assign({}, currentValues));
+        }
+      }
+
+    });
+  })();
+</script>
+</dom-module>
